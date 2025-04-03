@@ -1,0 +1,67 @@
+---
+import NewsListItem from "./news-list-item.astro";
+import { getCollection } from "astro:content";
+import EmptyList from "../components/empty-list.astro";
+import NewsIcon from "../images/icons/newspaper-news.svg";
+
+const news = await getCollection("news");
+
+const lastThreeMonths = news.filter((newsArticle) => {
+  const date = new Date(newsArticle.data.date);
+  const threeMonthsAgo = new Date();
+  threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
+  return date >= threeMonthsAgo;
+});
+---
+
+<div class="w-full flex flex-col gap-2">
+  <div class="flex flex-row gap-4 items-center">
+    <div class="flex flex-row gap-2 items-center flex-grow">
+      <svg
+        width="45"
+        height="58"
+        viewBox="0 0 45 58"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M9.54313 8.82768L27.4843 11.6434L10.9551 26.9334L9.54313 8.82768Z"
+          fill="#EC922D"></path>
+        <path
+          d="M36.5406 7.00815L22.1807 45.7603L8.19851 37.0857L36.5406 7.00815Z"
+          fill="#421C1A"></path>
+      </svg>
+      <h2 class="text-contrastDark font-bold">NEWS</h2>
+    </div>
+    <div class="flex flex-row gap-2 items-center">
+      <a
+        href={`${import.meta.env.BASE_URL}news`}
+        class="text-contrastDark hover:text-contrast">VIEW ALL</a
+      >
+    </div>
+  </div>
+
+  <div>
+    {
+      lastThreeMonths.length === 0 && (
+        <div class="w-full flex flex-col gap-2 max-w-5xl bg-black/20 py-4 px-2 rounded-md">
+          <EmptyList
+            title="Watch this space!"
+            description="There has been no news in the last three months."
+            icon={NewsIcon}
+          />
+        </div>
+      )
+    }
+    {
+      lastThreeMonths.map((newsArticle: any) => (
+        <NewsListItem
+          title={newsArticle.data.title}
+          date={newsArticle.data.date}
+          cover={newsArticle.data.cover}
+          compiledContent={newsArticle.rendered.html}
+        />
+      ))
+    }
+  </div>
+</div>

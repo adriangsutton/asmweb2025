@@ -1,0 +1,81 @@
+---
+import BaseLayout from "../../layouts/base.astro";
+import { getCollection, render } from "astro:content";
+import RecordingMetadata from "../../components/recording-metadata.astro";
+
+const recordings = await getCollection("recordings");
+
+export async function getStaticPaths() {
+  const recordings = await getCollection("recordings");
+
+  return recordings.map((recording) => ({
+    params: { recordingUrl: recording.data.url },
+  }));
+}
+
+const { recordingUrl } = Astro.params;
+
+const recording = recordings.find(
+  (recording) => recording.data.url === recordingUrl,
+);
+
+if (!recording) {
+  throw new Error(`Recording ${recordingUrl} not found`);
+}
+
+const { Content } = await render(recording);
+---
+
+<style>
+  .gradient {
+    background-color: hsla(0, 0%, 100%, 1);
+    background-image:
+      radial-gradient(
+        at 10% 14%,
+        hsla(30, 82%, 55%, 0.47) 0px,
+        transparent 50%
+      ),
+      radial-gradient(
+        at 28% 81%,
+        hsla(201, 47%, 34%, 0.52) 0px,
+        transparent 50%
+      ),
+      radial-gradient(
+        at 80% 77%,
+        hsla(17, 74%, 52%, 0.56) 0px,
+        transparent 50%
+      ),
+      radial-gradient(
+        at 84% 22%,
+        hsla(195, 26%, 52%, 0.35) 0px,
+        transparent 50%
+      );
+  }
+</style>
+<BaseLayout staticHeader={true}>
+  <div
+    class="flex flex-row gap-4 pt-24 w-full px-4 gradient justify-center items-start min-h-[calc(100vh-50px)]"
+  >
+    <div class="flex flex-col gap-4 max-w-[650px] flex-grow pb-4">
+      <RecordingMetadata recording={recording} inline={true} />
+      <div
+        class="p-4 bg-white/50 rounded-md overflow-hidden w-full flex flex-col gap-3"
+      >
+        <iframe
+          allow="autoplay *; encrypted-media *; fullscreen *; clipboard-write"
+          frameborder="0"
+          height="450"
+          style="width:100%;max-width:660px;overflow:hidden;border-radius:10px;"
+          sandbox="allow-forms allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation"
+          src={recording.data.audioUrl}></iframe>
+      </div>
+      <div
+        class="p-4 bg-white/50 rounded-md overflow-hidden w-full flex flex-col gap-3"
+      >
+        <h2 class="text-2xl font-bold text-center">{recording.data.title}</h2>
+        <Content />
+      </div>
+    </div>
+    <RecordingMetadata recording={recording} />
+  </div>
+</BaseLayout>

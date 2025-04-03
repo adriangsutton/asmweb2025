@@ -1,0 +1,55 @@
+---
+import FallbackBanner from "../images/banner-fallback.png";
+import FallbackCover from "../images/fallback-title-image.jpeg";
+import { Image } from "astro:assets";
+
+const { recording, inline } = Astro.props;
+---
+
+<div
+  class={inline
+    ? "flex flex-col gap-4 md:hidden"
+    : "flex-col gap-4 max-w-3xl pb-4 sticky top-24 hidden md:flex"}
+>
+  <div
+    class="container mx-auto bg-black rounded-md p-4 min-w-[300px] max-w-[300px] overflow-hidden relative flex flex-col justify-center items-center"
+  >
+    <div class="absolute top-0 left-0 w-full h-full z-0">
+      <Image
+        src={FallbackBanner}
+        alt={recording.data.title}
+        class="w-full h-full object-cover opacity-40"
+      />
+    </div>
+    <div class="w-[160px] h-[160px] min-w-[160px] min-h-[160px] z-10 relative">
+      {
+        recording.data.cover ? (
+          <Image
+            src={recording.data.cover}
+            alt={recording.data.title}
+            class="w-full h-full object-fit rounded-lg overflow-hidden"
+          />
+        ) : (
+          <Image
+            src={FallbackCover}
+            alt={recording.data.title}
+            class="w-full h-full object-fit rounded-lg overflow-hidden"
+          />
+        )
+      }
+    </div>
+    <div class="flex flex-col gap-2 z-10 relative pt-4 text-white w-full">
+      {
+        recording.data.metadata?.map((metadata: any) => (
+          <>
+            <div class="flex flex-row gap-2 items-end w-full justify-between">
+              <span class="text-sm">{metadata.title}</span>
+              <span class="font-bold">{metadata.description}</span>
+            </div>
+            <hr class="h-px border-t-0 bg-transparent bg-gradient-to-r from-transparent via-neutral-500 to-transparent opacity-50 dark:via-neutral-400" />
+          </>
+        ))
+      }
+    </div>
+  </div>
+</div>

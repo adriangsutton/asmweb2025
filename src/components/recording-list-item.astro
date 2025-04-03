@@ -1,0 +1,46 @@
+---
+import { Image } from "astro:assets";
+import FallbackCover from "../images/fallback-title-image.jpeg";
+
+const { recording } = Astro.props;
+---
+
+<style>
+  .gradient {
+    background-color: rgb(60, 47, 47);
+    background-image:
+      radial-gradient(
+        at 10% 14%,
+        hsla(30, 82%, 55%, 0.47) 0px,
+        transparent 50%
+      ),
+      radial-gradient(
+        at 28% 81%,
+        hsla(201, 47%, 34%, 0.52) 0px,
+        transparent 50%
+      ),
+      radial-gradient(
+        at 80% 77%,
+        hsla(17, 74%, 52%, 0.56) 0px,
+        transparent 50%
+      ),
+      radial-gradient(
+        at 84% 22%,
+        hsla(195, 26%, 52%, 0.35) 0px,
+        transparent 50%
+      );
+  }
+</style>
+<a href={`${import.meta.env.BASE_URL}recordings/${recording.data.url}`}>
+  <div class="grid">
+    <div
+      class="bg-base-100 hover:bg-contrastDark/30 shadow-sm drop-shadow-md overflow-hidden p-2 pt-3 bg-black/10 gap-3 flex flex-col items-center justify-center rounded-lg hover:scale-[1.02] transition-all duration-300"
+    >
+      <Image
+        src={recording.data.cover || FallbackCover}
+        alt={recording.data.title}
+        class="xs:w-[180px] xs:h-[180px] sm:w-[200px] sm:h-[200px] md:w-[220px] md:h-[220px] lg:w-[250px] lg:h-[250px] object-cover rounded-lg drop-shadow-md"
+      />
+    </div>
+  </div>
+</a>

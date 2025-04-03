@@ -1,0 +1,137 @@
+---
+import NewsListItem from "../components/news-list-item.astro";
+import EmptyList from "../components/empty-list.astro";
+import BaseLayout from "../layouts/base.astro";
+import { getCollection } from "astro:content";
+import NewsIcon from "../images/icons/newspaper-news.svg";
+
+const news = await getCollection("news");
+
+const lastThreeMonths = news.filter((newsArticle) => {
+  const date = new Date(newsArticle.data.date);
+  const threeMonthsAgo = new Date();
+  threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
+  return date >= threeMonthsAgo;
+});
+
+const allNews = news.filter((newsArticle) => {
+  const date = new Date(newsArticle.data.date);
+  const threeMonthsAgo = new Date();
+  threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
+  return date < threeMonthsAgo;
+});
+---
+
+<style>
+  .gradient {
+    background-color: hsla(0, 0%, 100%, 1);
+    background-image:
+      radial-gradient(
+        at 10% 14%,
+        hsla(30, 82%, 55%, 0.47) 0px,
+        transparent 50%
+      ),
+      radial-gradient(
+        at 28% 81%,
+        hsla(201, 47%, 34%, 0.52) 0px,
+        transparent 50%
+      ),
+      radial-gradient(
+        at 80% 77%,
+        hsla(17, 74%, 52%, 0.56) 0px,
+        transparent 50%
+      ),
+      radial-gradient(
+        at 84% 22%,
+        hsla(195, 26%, 52%, 0.35) 0px,
+        transparent 50%
+      );
+  }
+</style>
+<BaseLayout staticHeader={true}>
+  <div
+    class="gradient w-full pt-24 flex flex-col gap-2 flex-grow px-4 pb-4 min-h-lvh relative"
+  >
+    <div class="flex flex-col gap-4 items-center">
+      <div class="flex flex-col gap-4">
+        <div class="flex flex-row gap-2 items-center flex-grow">
+          <svg
+            width="45"
+            height="58"
+            viewBox="0 0 45 58"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M9.54313 8.82768L27.4843 11.6434L10.9551 26.9334L9.54313 8.82768Z"
+              fill="#EC922D"></path>
+            <path
+              d="M36.5406 7.00815L22.1807 45.7603L8.19851 37.0857L36.5406 7.00815Z"
+              fill="#421C1A"></path>
+          </svg>
+          <h2 class="text-contrastDark font-bold">NEWS</h2>
+        </div>
+      </div>
+      <div class="flex flex-row gap-2 items-center w-full p-2">
+        <hr
+          class="h-px border-t-0 bg-transparent bg-gradient-to-r from-transparent via-neutral-500 to-transparent opacity-50 dark:via-neutral-400 flex-grow"
+        />
+        <p class="text-contrastDark font-bold">LAST THREE MONTHS</p>
+        <hr
+          class="h-px border-t-0 bg-transparent bg-gradient-to-r from-transparent via-neutral-500 to-transparent opacity-50 dark:via-neutral-400 flex-grow"
+        />
+      </div>
+      <div class="w-full flex flex-col gap-2 max-w-5xl">
+        {
+          lastThreeMonths.length === 0 && (
+            <EmptyList
+              title="Watch this space!"
+              description="There has been no news in the last three months."
+              icon={NewsIcon}
+            />
+          )
+        }
+        {
+          lastThreeMonths.map((newsArticle: any) => (
+            <NewsListItem
+              title={newsArticle.data.title}
+              date={newsArticle.data.date}
+              cover={newsArticle.data.cover}
+              compiledContent={newsArticle.rendered.html}
+            />
+          ))
+        }
+      </div>
+      <div class="flex flex-row gap-2 items-center w-full p-2">
+        <hr
+          class="h-px border-t-0 bg-transparent bg-gradient-to-r from-transparent via-neutral-500 to-transparent opacity-50 dark:via-neutral-400 flex-grow"
+        />
+        <p class="text-contrastDark font-bold">ALL NEWS</p>
+        <hr
+          class="h-px border-t-0 bg-transparent bg-gradient-to-r from-transparent via-neutral-500 to-transparent opacity-50 dark:via-neutral-400 flex-grow"
+        />
+      </div>
+      <div class="w-full flex flex-col gap-2 max-w-5xl">
+        {
+          allNews.length === 0 && (
+            <EmptyList
+              title="No news to show"
+              description="There are no news articles found."
+              icon="/public/icons/newspaper-news.svg"
+            />
+          )
+        }
+        {
+          allNews.map((newsArticle: any) => (
+            <NewsListItem
+              title={newsArticle.data.title}
+              date={newsArticle.data.date}
+              cover={newsArticle.data.cover}
+              compiledContent={newsArticle.rendered.html}
+            />
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</BaseLayout>

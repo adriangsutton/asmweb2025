@@ -1,0 +1,268 @@
+---
+import BaseLayout from "../layouts/base.astro";
+import { getCollection } from "astro:content";
+import { Image } from "astro:assets";
+import MenuListItem from "../components/menu-list-item.astro";
+import BirdOne from "../images/bird-1.png";
+import BirdTwo from "../images/bird-2.png";
+import BirdThree from "../images/bird-3.png";
+import MediaImageCard from "../components/media-image-card.astro";
+import Modal from "../components/modal.astro";
+import FilterIcon from "../components/filter-icon.astro";
+const media = await getCollection("media");
+
+// Define filter categories
+const filterCategories = [
+  { title: "All", filter: "all" },
+  { title: "Performances", filter: "performances" },
+  { title: "Portraits", filter: "portraits" },
+  { title: "Album Artwork", filter: "album-artwork" },
+  { title: "Production Stills", filter: "production-stills" },
+];
+---
+
+<style>
+  .gradient {
+    background-color: hsla(0, 0%, 100%, 1);
+    background-image:
+      radial-gradient(at 7% 18%, hsla(30, 82%, 55%, 0.47) 0px, transparent 50%),
+      radial-gradient(
+        at 83% 17%,
+        hsla(201, 47%, 34%, 0.52) 0px,
+        transparent 50%
+      ),
+      radial-gradient(
+        at 14% 84%,
+        hsla(17, 74%, 52%, 0.56) 0px,
+        transparent 50%
+      ),
+      radial-gradient(
+        at 86% 74%,
+        hsla(195, 26%, 52%, 0.35) 0px,
+        transparent 50%
+      );
+  }
+</style>
+<div>
+  <BaseLayout staticHeader={true}>
+    <div
+      class="gradient w-full pt-[5.4rem] flex flex-row gap-2 flex-grow px-4 pb-4 min-h-lvh relative items-start"
+    >
+      <div
+        class="w-[300px] flex-col gap-3 bg-white/50 rounded-lg sticky top-[5.4rem] p-2 drop-shadow-2xl hidden md:flex"
+      >
+        {
+          filterCategories.map((category) => (
+            <MenuListItem title={category.title} filter={category.filter} />
+          ))
+        }
+        <div
+          class="flex flex-col gap-2 w-full justify-center items-center opacity-50 pt-10"
+        >
+          <Image src={BirdOne} alt="Bird 1" class="w-32 h-32 object-contain" />
+          <Image src={BirdTwo} alt="Bird 2" class="w-24 h-24 object-contain" />
+          <Image
+            src={BirdThree}
+            alt="Bird 3"
+            class="w-20 h-20 object-contain"
+          />
+        </div>
+      </div>
+      <div class="w-full px-4 pb-4 flex flex-col gap-4">
+        <div
+          class="w-full sticky top-[5.4rem] z-10 flex flex-row gap-3 justify-end"
+        >
+          <div class="dropdown dropdown-end md:hidden">
+            <div
+              tabindex={0}
+              role="button"
+              class="btn btn-sm px-3 py-1 w-12 max-w-12"
+            >
+              <FilterIcon />
+            </div>
+            <ul
+              tabindex={0}
+              id="filter-dropdown"
+              class="dropdown-content menu bg-base-100 rounded-md z-1 w-52 p-2 shadow-lg mt-2"
+            >
+              {
+                filterCategories.map((category) => (
+                  <MenuListItem
+                    title={category.title}
+                    filter={category.filter}
+                  />
+                ))
+              }
+            </ul>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+          {media.map((item) => <MediaImageCard mediaItem={item} />)}
+        </div>
+      </div>
+    </div>
+  </BaseLayout>
+  <Modal id="image-modal" imageSrc="" imageAlt="" />
+</div>
+<script>
+  // Client-side filtering
+  let currentFilter = "all";
+
+  function filterWorks(filter = currentFilter) {
+    currentFilter = filter;
+    const workItems = document.querySelectorAll(".media-item");
+
+    workItems.forEach((item) => {
+      const tagsString = item.getAttribute("data-tags");
+      if (!tagsString) return;
+
+      const tags = JSON.parse(tagsString);
+      const htmlItem = item as HTMLElement;
+
+      const passesTagFilter =
+        filter === "all" ||
+        (Array.isArray(tags) ? tags.includes(filter) : tags === filter);
+
+      // Show item only if it passes both filters
+      htmlItem.classList.toggle("hidden", !passesTagFilter);
+    });
+
+    // Update active state of menu items
+    const menuItems = document.querySelectorAll(".menu-list-item");
+
+    menuItems.forEach((item) => {
+      const itemFilter = item.getAttribute("data-filter");
+
+      if (itemFilter === filter) {
+        item.classList.add("bg-white/80", "font-bold");
+        item.classList.remove("bg-white/30");
+      } else {
+        item.classList.remove("bg-white/80", "font-bold");
+        item.classList.add("bg-white/30");
+      }
+    });
+  }
+
+  // Set up click handlers for menu items
+  function setupMenuListeners() {
+    const menuItems = document.querySelectorAll(".menu-list-item");
+    menuItems.forEach((item) => {
+      item.addEventListener("click", (e) => {
+        e.preventDefault();
+        const filter = item.getAttribute("data-filter");
+        if (filter) {
+          const searchInput = document.getElementById(
+            "search-input",
+          ) as HTMLInputElement;
+          filterWorks(filter);
+
+          // Close the dropdown by removing focus
+          const dropdown = document.getElementById("filter-dropdown");
+          if (dropdown) {
+            dropdown.blur();
+          }
+        }
+      });
+    });
+  }
+
+  function setupDownloadListeners() {
+    const downloadButtons = document.querySelectorAll(".download-btn");
+
+    downloadButtons.forEach((button) => {
+      button.addEventListener("click", (e) => {
+        e.stopPropagation();
+
+        const imageSrc = button.getAttribute("data-image-src");
+        const imageName = button.getAttribute("data-image-name");
+
+        if (imageSrc) {
+          // Create a temporary anchor element to trigger the download
+          const downloadLink = document.createElement("a");
+          downloadLink.href = imageSrc;
+          downloadLink.download = `${imageName || "image"}.jpg`;
+          document.body.appendChild(downloadLink);
+          downloadLink.click();
+          document.body.removeChild(downloadLink);
+        }
+      });
+    });
+  }
+
+  // Run filtering on page load
+  document.addEventListener("DOMContentLoaded", () => {
+    setupMenuListeners();
+    setupDownloadListeners();
+    filterWorks("all"); // Start with "all" filter
+  });
+
+  const mediaItems = document.querySelectorAll(".media-item");
+
+  mediaItems.forEach((item) => {
+    item.addEventListener("click", (e) => {
+      e.stopPropagation();
+      openModal(item);
+    });
+  });
+
+  function openModal(element: Element) {
+    const img = element.querySelector("img");
+    if (!img) return;
+
+    const modalTitleCard = element.querySelector("#modal-title");
+    if (!modalTitleCard) return;
+
+    const modal = document.getElementById("image-modal");
+    if (!modal) return;
+
+    const modalImg = modal.querySelector("img");
+    if (!modalImg) return;
+
+    const modalTitle = modal.querySelector("#modal-title");
+    if (!modalTitle) return;
+
+    const modalDownloadBtn = modal.querySelector(".download-btn");
+    if (!modalDownloadBtn) return;
+
+    const downloadBtn = element.querySelector(".download-btn");
+    if (!downloadBtn) return;
+
+    const attribution = element.querySelector("#modal-attribution");
+
+    if (attribution) {
+      const attributionContainer = modal.querySelector(
+        "#modal-attribution-container",
+      );
+
+      if (attributionContainer) {
+        attributionContainer.classList.add("opacity-100");
+        attributionContainer.classList.remove("opacity-0");
+
+        const modalAttribution = modal.querySelector("#modal-attribution");
+        if (modalAttribution) {
+          modalAttribution.textContent = attribution.textContent;
+        }
+      }
+    }
+
+    modalTitle.textContent = modalTitleCard.textContent;
+
+    modalImg.src = img.src;
+    modalImg.alt = img.alt;
+
+    const downloadBtnElement = downloadBtn as HTMLButtonElement;
+    const modalDownloadBtnElement = modalDownloadBtn as HTMLButtonElement;
+
+    modalDownloadBtnElement.dataset.imageSrc =
+      downloadBtnElement.dataset.imageSrc;
+    modalDownloadBtnElement.dataset.imageName =
+      downloadBtnElement.dataset.imageName;
+
+    modal.classList.remove("hidden");
+    document.body.style.overflow = "hidden";
+
+    modalImg.addEventListener("load", () => {
+      modal.classList.add("opacity-100");
+    });
+  }
+</script>

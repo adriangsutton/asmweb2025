@@ -1,0 +1,105 @@
+---
+import BaseLayout from "../layouts/base.astro";
+import ContactDetails from "../components/contact-details.astro";
+import { Image } from "astro:assets";
+
+import SeizeTheDay from "../images/SeizeTheDay-117.jpg";
+---
+
+<style>
+  .gradient {
+    background-color: hsla(0, 0%, 100%, 1);
+    background-image:
+      radial-gradient(
+        at 10% 14%,
+        hsla(30, 82%, 55%, 0.47) 0px,
+        transparent 50%
+      ),
+      radial-gradient(
+        at 28% 81%,
+        hsla(201, 47%, 34%, 0.52) 0px,
+        transparent 50%
+      ),
+      radial-gradient(
+        at 80% 77%,
+        hsla(17, 74%, 52%, 0.56) 0px,
+        transparent 50%
+      ),
+      radial-gradient(
+        at 84% 22%,
+        hsla(195, 26%, 52%, 0.35) 0px,
+        transparent 50%
+      );
+  }
+</style>
+<BaseLayout staticHeader={true}>
+  <div class="min-h-[calc(100vh-50px)] w-full relative">
+    <div class="gradient absolute z-0 top-0 left-0 h-full w-full">
+      <Image
+        src={SeizeTheDay}
+        alt="Seize The Day"
+        class="w-full h-full object-cover opacity-50"
+      />
+    </div>
+    <div
+      class="w-full flex flex-col md:flex-row gap-4 items-center md:items-start justify-center z-10 relative h-full p-4 pt-24 md:py-24"
+    >
+      <ContactDetails />
+      <div
+        class="flex flex-col gap-4 bg-white/50 p-4 rounded-lg w-full md:w-auto"
+      >
+        <h3
+          class="text-primaryDark text-2xl font-bold tracking-wider w-full text-center border-b border-gray-300 pb-4"
+        >
+          Send Adrian a message!
+        </h3>
+        <form
+          name="simple-contact-form"
+          accept-charset="utf-8"
+          action="https://formspree.io/f/xrgjlzgb"
+          method="post"
+          class="flex flex-col gap-4 w-full md:w-80 lg:w-96"
+        >
+          <fieldset class="fieldset">
+            <legend class="fieldset-legend">Full Name</legend>
+            <input
+              type="text"
+              class="input w-full"
+              name="name"
+              id="full-name"
+              placeholder="First and Last"
+            />
+          </fieldset>
+          <fieldset class="fieldset">
+            <legend class="fieldset-legend">Email Address</legend>
+            <input
+              type="email"
+              class="input w-full"
+              name="_replyto"
+              id="email-address"
+              placeholder="email@domain.tld"
+              required=""
+            />
+          </fieldset>
+          <fieldset class="fieldset">
+            <legend class="fieldset-legend">Message</legend>
+            <textarea
+              rows="5"
+              class="textarea w-full"
+              name="message"
+              id="message"
+              placeholder="Type your message here"
+              required=""></textarea>
+          </fieldset>
+          <input
+            type="hidden"
+            name="_subject"
+            id="email-subject"
+            value="Contact Form Submission"
+          />
+          <input type="submit" value="Submit" class="btn" />
+        </form>
+      </div>
+    </div>
+  </div>
+</BaseLayout>

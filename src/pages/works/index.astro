@@ -1,0 +1,240 @@
+---
+import BaseLayout from "../../layouts/base.astro";
+import { getCollection } from "astro:content";
+import WorkListItem from "../../components/work-list-item.astro";
+import MenuListItem from "../../components/menu-list-item.astro";
+import AudioPlayer from "../../components/audio-player.astro";
+import { Image } from "astro:assets";
+import FilterIcon from "../../components/filter-icon.astro";
+
+import BirdOne from "../../images/bird-1.png";
+import BirdTwo from "../../images/bird-2.png";
+import BirdThree from "../../images/bird-3.png";
+
+const allWorks = await getCollection("works");
+
+const sortedWorks = allWorks.sort((a, b) => {
+  return a.data.sectionSortOrder - b.data.sectionSortOrder;
+});
+
+// Define filter categories
+const filterCategories = [
+  { title: "All", filter: "all" },
+  { title: "Orchestral", filter: "orchestral" },
+  { title: "Ensemble", filter: "ensemble" },
+  { title: "Solo & Duo", filter: "soloduo" },
+  { title: "Choral", filter: "choral" },
+  { title: "Theatre", filter: "theatre" },
+];
+---
+
+<style>
+  .gradient {
+    background-color: hsla(0, 0%, 52%, 1);
+    background-image:
+      radial-gradient(
+        at 20% 74%,
+        hsla(30, 82%, 55%, 0.47) 0px,
+        transparent 50%
+      ),
+      radial-gradient(
+        at 21% 13%,
+        hsla(201, 47%, 34%, 0.52) 0px,
+        transparent 50%
+      ),
+      radial-gradient(
+        at 76% 72%,
+        hsla(17, 74%, 52%, 0.56) 0px,
+        transparent 50%
+      ),
+      radial-gradient(
+        at 79% 13%,
+        hsla(195, 26%, 52%, 0.35) 0px,
+        transparent 50%
+      );
+  }
+</style>
+<BaseLayout staticHeader={true}>
+  <div
+    class="gradient w-full pt-24 flex flex-row gap-2 flex-grow px-4 pb-4 min-h-lvh relative items-start"
+  >
+    <div
+      class="w-[230px] 2xl:w-[250px] min-w-[230px] 2xl:min-w-[250px] flex-col gap-3 bg-white/50 rounded-lg sticky top-24 p-2 drop-shadow-2xl hidden md:flex"
+    >
+      {
+        filterCategories.map((category) => (
+          <MenuListItem title={category.title} filter={category.filter} />
+        ))
+      }
+      <div
+        class="flex flex-col gap-2 w-full justify-center items-center opacity-50 pt-10"
+      >
+        <Image src={BirdOne} alt="Bird 1" class="w-32 h-32 object-contain" />
+        <Image src={BirdTwo} alt="Bird 2" class="w-24 h-24 object-contain" />
+        <Image src={BirdThree} alt="Bird 3" class="w-20 h-20 object-contain" />
+      </div>
+    </div>
+    <div class="flex flex-col gap-4 flex-grow pl-2">
+      <div class="join w-full sticky top-24 z-10 flex flex-row gap-3">
+        <div
+          class="input input-sm md:input-md flex items-center flex-grow drop-shadow-lg"
+        >
+          <svg
+            class="h-[1em] opacity-50 mr-2"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            ><g
+              stroke-linejoin="round"
+              stroke-linecap="round"
+              stroke-width="2.5"
+              fill="none"
+              stroke="currentColor"
+              ><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"
+              ></path></g
+            ></svg
+          >
+          <input
+            type="search"
+            class="grow outline-none bg-transparent"
+            placeholder="Search"
+            id="search-input"
+          />
+        </div>
+        <div class="dropdown dropdown-end md:hidden">
+          <div
+            tabindex={0}
+            role="button"
+            class="btn btn-sm px-3 py-1 w-12 max-w-12"
+          >
+            <FilterIcon />
+          </div>
+          <ul
+            tabindex={0}
+            id="filter-dropdown"
+            class="dropdown-content menu bg-base-100 rounded-md z-1 w-52 p-2 shadow-lg mt-2"
+          >
+            {
+              filterCategories.map((category) => (
+                <MenuListItem title={category.title} filter={category.filter} />
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 lg:grid-cols-2 3xl:grid-cols-3 gap-3">
+        {
+          sortedWorks.map((work) => (
+            <div
+              class="work-item hidden col-span-1"
+              data-tags={JSON.stringify(work.data.tags)}
+              data-search={work.data.title}
+            >
+              <WorkListItem work={work} />
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+  <AudioPlayer />
+</BaseLayout>
+<script>
+  // Client-side filtering
+  let currentFilter = "all";
+  let searchTimeout: number | null = null;
+
+  function filterWorks(filter = currentFilter, searchQuery = "") {
+    currentFilter = filter;
+    const workItems = document.querySelectorAll(".work-item");
+    const searchLower = searchQuery.toLowerCase();
+
+    workItems.forEach((item) => {
+      const tagsString = item.getAttribute("data-tags");
+      const searchText = (item.getAttribute("data-search") || "").toLowerCase();
+      if (!tagsString) return;
+
+      const tags = JSON.parse(tagsString);
+      const htmlItem = item as HTMLElement;
+
+      const passesTagFilter =
+        filter === "all" ||
+        (Array.isArray(tags) ? tags.includes(filter) : tags === filter);
+
+      // Check if item passes search filter (partial matching)
+      const passesSearchFilter =
+        searchLower === "" || searchText.includes(searchLower);
+
+      // Show item only if it passes both filters
+      htmlItem.classList.toggle(
+        "hidden",
+        !(passesTagFilter && passesSearchFilter),
+      );
+    });
+
+    // Update active state of menu items
+    const menuItems = document.querySelectorAll(".menu-list-item");
+
+    menuItems.forEach((item) => {
+      const itemFilter = item.getAttribute("data-filter");
+
+      if (itemFilter === filter) {
+        item.classList.add("bg-white/80", "font-bold");
+        item.classList.remove("bg-white/30");
+      } else {
+        item.classList.remove("bg-white/80", "font-bold");
+        item.classList.add("bg-white/30");
+      }
+    });
+  }
+
+  // Throttled search function
+  function handleSearch(e: Event) {
+    const searchInput = e.target as HTMLInputElement;
+    const searchQuery = searchInput.value;
+
+    // Clear any pending timeout
+    if (searchTimeout) {
+      clearTimeout(searchTimeout);
+    }
+
+    // Set a new timeout (300ms throttle)
+    searchTimeout = window.setTimeout(() => {
+      filterWorks(currentFilter, searchQuery);
+    }, 300);
+  }
+
+  // Set up click handlers for menu items
+  function setupMenuListeners() {
+    const menuItems = document.querySelectorAll(".menu-list-item");
+    menuItems.forEach((item) => {
+      item.addEventListener("click", (e) => {
+        e.preventDefault();
+        const filter = item.getAttribute("data-filter");
+        if (filter) {
+          const searchInput = document.getElementById(
+            "search-input",
+          ) as HTMLInputElement;
+          filterWorks(filter, searchInput?.value || "");
+
+          // Close the dropdown by removing focus
+          const dropdown = document.getElementById("filter-dropdown");
+          if (dropdown) {
+            dropdown.blur();
+          }
+        }
+      });
+    });
+
+    // Set up search input listener
+    const searchInput = document.getElementById("search-input");
+    if (searchInput) {
+      searchInput.addEventListener("input", handleSearch);
+    }
+  }
+
+  // Run filtering on page load
+  document.addEventListener("DOMContentLoaded", () => {
+    setupMenuListeners();
+    filterWorks("all", ""); // Start with "all" filter
+  });
+</script>

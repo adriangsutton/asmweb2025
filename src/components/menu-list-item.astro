@@ -1,0 +1,10 @@
+---
+const { title, filter } = Astro.props;
+---
+
+<a
+  data-filter={filter}
+  class={`menu-list-item px-4 py-2 rounded-md hover:bg-white/80 transition-colors duration-200 w-full text-left block text-primary bg-white/30 cursor-pointer`}
+>
+  {title}
+</a>

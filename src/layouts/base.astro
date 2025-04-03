@@ -1,0 +1,79 @@
+---
+import Header from "../components/header.astro";
+import Footer from "../components/footer.astro";
+import FallbackBanner from "../images/banner-fallback.png";
+import { Image } from "astro:assets";
+
+import "../styles/global.css";
+
+const { staticHeader } = Astro.props;
+
+import "../fonts/HalisGRRegular.woff";
+import "../fonts/HalisGRBold.woff";
+import "../fonts/HalisGRLight.woff";
+---
+
+<html lang="en" data-theme="custom" class="bg-contrastDark">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="./fav-logo-white.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>Adrian Sutton</title>
+    <base href={import.meta.env.BASE_URL} />
+    <script
+      type="module"
+      src="https://cdn.jsdelivr.net/npm/player.style/tailwind-audio/+esm"
+    ></script>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/media-chrome@4/+esm"
+    ></script>
+  </head>
+  <body class="relative">
+    <div class="fixed top-0 left-0 w-full h-full max-h-[50vh] -z-0">
+      <Image
+        src={FallbackBanner}
+        alt={""}
+        loading="eager"
+        class="w-full h-full object-cover opacity-40"
+      />
+    </div>
+    <Header staticHeader={staticHeader} />
+    <div class="relative w-full z-10">
+      <slot />
+    </div>
+    <Footer />
+    <div class="fixed bottom-0 left-0 w-full h-full max-h-[50vh] -z-0">
+      <Image
+        src={FallbackBanner}
+        alt={""}
+        loading="eager"
+        class="w-full h-full object-cover opacity-40"
+      />
+    </div>
+  </body>
+</html>
+<style>
+  @font-face {
+    font-family: "HalisGR";
+    src: url("/src/fonts/HalisGRRegular.woff") format("woff");
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: "HalisGR";
+    src: url("/src/fonts/HalisGRBold.woff") format("woff");
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: "HalisGR";
+    src: url("/src/fonts/HalisGRLight.woff") format("woff");
+    font-weight: lighter;
+    font-style: normal;
+    font-display: swap;
+  }
+</style>

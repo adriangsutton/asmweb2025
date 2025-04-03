@@ -1,0 +1,140 @@
+---
+import LogoAndName from "../components/logo-and-name.astro";
+import Navigation from "./navigation.astro";
+import NavButton from "./nav-button.astro";
+const { staticHeader } = Astro.props;
+---
+
+<div>
+  <div
+    class="w-full h-[25vh] absolute pointer-events-none top-0"
+    id="transition-capture"
+  >
+  </div>
+  <header
+    id="header-banner"
+    class=`z-20 flex flex-row w-full items-center place-content-between fixed top-0 drop-shadow-lg transition-colors duration-200 ${staticHeader ? "bg-secondary" : ""}`
+  >
+    <LogoAndName />
+    <button
+      id="hamburger-button"
+      class="md:hidden p-2 text-primary hover:text-contrastDark transition-colors mr-4 duration-300 ease-in-out"
+      aria-label="Toggle menu"
+    >
+      <svg
+        class="w-6 h-6"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M4 6h16M4 12h16M4 18h16"></path>
+      </svg>
+    </button>
+    <nav class="hidden md:block">
+      <Navigation />
+    </nav>
+  </header>
+  <div
+    id="mobile-menu"
+    class="fixed inset-0 bg-black opacity-0 z-50 hidden md:hidden drop-shadow-lg transition-opacity duration-300 ease-in-out"
+  >
+  </div>
+  <div
+    id="mobile-nav"
+    class="fixed top-0 right-0 h-full w-64 bg-secondary transform translate-x-full transition-transform duration-300 ease-in-out z-50 md:hidden border-l border-contrastDark"
+  >
+    <div class="flex flex-col h-full">
+      <div class="flex justify-end p-4">
+        <button
+          id="close-menu"
+          class="text-primary hover:text-contrastDark transition-colors"
+          aria-label="Close menu"
+        >
+          <svg
+            class="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+      <nav class="flex-1 p-4">
+        <div class="flex flex-col gap-4">
+          <NavButton href="./about" title="ABOUT" />
+          <NavButton href="./works" title="WORKS" />
+          <NavButton href="./recordings" title="RECORDINGS" />
+          <NavButton href="./media" title="MEDIA" />
+          <NavButton href="./contact" title="CONTACT" />
+        </div>
+      </nav>
+    </div>
+  </div>
+</div>
+
+<script define:vars={{ staticHeader }}>
+  // Header background transition
+  const transitionCaptureElement =
+    document.getElementById("transition-capture");
+  const header = document.getElementById("header-banner");
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (header) {
+        if (entry.isIntersecting) {
+          header.style.backgroundColor = "";
+        } else {
+          header.style.backgroundColor = "#EDC579";
+        }
+      }
+    });
+  });
+
+  if (transitionCaptureElement && !staticHeader) {
+    observer.observe(transitionCaptureElement);
+  }
+
+  // Mobile menu functionality
+  const hamburgerButton = document.getElementById("hamburger-button");
+  const closeButton = document.getElementById("close-menu");
+  const mobileMenu = document.getElementById("mobile-menu");
+  const mobileNav = document.getElementById("mobile-nav");
+
+  function openMenu() {
+    mobileMenu?.classList.remove("hidden");
+    mobileMenu?.classList.remove("opacity-0");
+    mobileMenu?.classList.add("opacity-50");
+    mobileNav?.classList.remove("translate-x-full");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeMenu() {
+    mobileMenu?.classList.add("hidden");
+    mobileMenu?.classList.remove("opacity-50");
+    mobileMenu?.classList.add("opacity-0");
+
+    mobileNav?.classList.add("translate-x-full");
+    document.body.style.overflow = "";
+  }
+
+  hamburgerButton?.addEventListener("click", openMenu);
+  closeButton?.addEventListener("click", closeMenu);
+  mobileMenu?.addEventListener("click", closeMenu);
+
+  // Close menu on window resize if open
+  window.addEventListener("resize", () => {
+    if (window.innerWidth >= 768) {
+      // md breakpoint
+      closeMenu();
+    }
+  });
+</script>

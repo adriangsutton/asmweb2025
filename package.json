@@ -1,0 +1,25 @@
+{
+  "name": "adrian-sutton",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/tailwind": "^5.1.4",
+    "astro": "^5.1.7",
+    "daisyui": "^4.12.23",
+    "fs-extra": "^11.3.0",
+    "fulldev-ui": "^0.6.3",
+    "sharp": "^0.33.5",
+    "tailwindcss": "^3.4.17"
+  },
+  "devDependencies": {
+    "prettier": "^3.4.2",
+    "prettier-plugin-astro": "^0.14.1"
+  },
+  "packageManager": "pnpm@10.4.1"
+}

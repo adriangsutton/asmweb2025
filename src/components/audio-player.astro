@@ -1,0 +1,170 @@
+---
+import PlayIcon from "./playIcon.astro";
+import PauseIcon from "./pauseIcon.astro";
+import AudioIcon from "./audioIcon.astro";
+import AudioMutedIcon from "./audioMutedIcon.astro";
+---
+
+<div
+  id="audio-player-container"
+  class="bg-secondary fixed bottom-0 z-20 hidden h-16 w-full items-center px-5 opacity-0 transition-opacity duration-500 text-primary shadow-[0_-8px_15px_-3px_rgba(0,0,0,0.15)]"
+>
+  <audio src="" preload="metadata"></audio>
+  <span
+    id="audio-loading"
+    class="loading loading-spinner loading-md hidden min-w-[1.5rem]"></span>
+  <label id="audio-control" class="swap hidden py-10">
+    <input type="checkbox" id="play-icon" />
+    <div id="play-icon-svg" class="swap-off h-[24px] w-[24px]">
+      <PlayIcon />
+    </div>
+    <div id="pause-icon-svg" class="swap-on h-[24px] w-[24px]">
+      <PauseIcon />
+    </div>
+  </label>
+  <div class="flex flex-row items-center w-[150px]">
+    <span id="current-time" class="mr-2 ml-5">0:00</span>/
+    <span id="duration" class="ml-2">0:00</span>
+  </div>
+  <input
+    id="seek-slider"
+    type="range"
+    min="0"
+    max="0"
+    value="0"
+    class="range range-primary range-xs mx-5"
+  />
+  <label class="swap ml-5">
+    <input id="mute-icon" type="checkbox" />
+    <div class="swap-off">
+      <AudioIcon />
+    </div>
+    <div class="swap-on">
+      <AudioMutedIcon />
+    </div>
+  </label>
+</div>
+
+<script>
+  const playIconContainer = document.getElementById("play-icon");
+  const muteIconContainer = document.getElementById("mute-icon");
+  const audioControl = document.getElementById("audio-control");
+  const audioLoading = document.getElementById("audio-loading");
+  const musicPlayer = document.getElementById("audio-player-container");
+  const footer = document.getElementsByTagName("footer")[0];
+
+  const audio = document.querySelector("audio");
+  const durationContainer = document.getElementById("duration");
+  const currentTimeContainer = document.getElementById("current-time");
+  const seekSlider = document.getElementById("seek-slider");
+
+  const calculateTime = (secs: any) => {
+    const hours = Math.floor(secs / 3600);
+    const minutes = Math.floor((secs % 3600) / 60);
+    const seconds = Math.floor(secs % 60);
+    const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+    const formattedseconds = seconds < 10 ? `0${seconds}` : seconds;
+
+    return hours > 0
+      ? `${hours}:${formattedMinutes}:${formattedseconds}`
+      : `${minutes}:${formattedseconds}`;
+  };
+
+  const displayDuration = () => {
+    if (!audio || !durationContainer) return;
+    durationContainer.textContent = calculateTime(audio.duration);
+  };
+
+  if (audio && audio.readyState > 0) {
+    displayDuration();
+    audioLoading?.classList.add("hidden");
+    audioControl?.classList.remove("hidden");
+  } else {
+    audio?.addEventListener("loadedmetadata", () => {
+      displayDuration();
+      if (!audio || !seekSlider) return;
+      seekSlider.setAttribute("max", audio.duration.toString());
+      audioLoading?.classList.add("hidden");
+      audioControl?.classList.remove("hidden");
+    });
+  }
+
+  muteIconContainer?.addEventListener("click", () => {
+    if (!audio || !muteIconContainer) return;
+    const muteInput = muteIconContainer as HTMLInputElement;
+    audio.muted = muteInput.checked;
+  });
+
+  seekSlider?.addEventListener("input", () => {
+    if (!seekSlider || !currentTimeContainer) return;
+    const rangeInput = seekSlider as HTMLInputElement;
+    currentTimeContainer.textContent = calculateTime(Number(rangeInput.value));
+  });
+
+  seekSlider?.addEventListener("change", () => {
+    if (!audio || !seekSlider) return;
+    const rangeInput = seekSlider as HTMLInputElement;
+    audio.currentTime = Number(rangeInput.value);
+  });
+
+  audio?.addEventListener("timeupdate", () => {
+    if (!audio || !seekSlider || !currentTimeContainer) return;
+    const rangeInput = seekSlider as HTMLInputElement;
+    rangeInput.value = Math.floor(audio.currentTime).toString();
+    currentTimeContainer.textContent = calculateTime(Number(rangeInput.value));
+  });
+
+  const playButtons =
+    document.querySelectorAll<HTMLInputElement>(".card-pay-buttons");
+
+  playIconContainer?.addEventListener("change", () => {
+    if (!audio || !playIconContainer) return;
+    const playInput = playIconContainer as HTMLInputElement;
+    if (playInput.checked) {
+      audio.play();
+    } else {
+      audio.pause();
+      disableOthersPlayButtons("", playButtons);
+    }
+  });
+
+  playButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      if (!audio || !playIconContainer) return;
+      const playInput = playIconContainer as HTMLInputElement;
+      const audioUrl = btn.dataset.audioUrl;
+
+      if (!audio.src.includes(audioUrl || "")) {
+        musicPlayer?.classList.remove("hidden");
+        musicPlayer?.classList.add("flex");
+        footer?.classList.add("pb-24");
+        setTimeout(() => musicPlayer?.classList.remove("opacity-0"), 100);
+        audioLoading?.classList.remove("hidden");
+        audioControl?.classList.add("hidden");
+        if (durationContainer) {
+          durationContainer.textContent = "0:00";
+        }
+        if (currentTimeContainer) {
+          currentTimeContainer.textContent = "0:00";
+        }
+        audio.src = audioUrl || "";
+        disableOthersPlayButtons(btn.id, playButtons);
+        playInput.checked = true;
+        audio.play();
+      } else {
+        playIconContainer?.click();
+      }
+    });
+  });
+
+  function disableOthersPlayButtons(
+    id: string,
+    buttons: NodeListOf<HTMLInputElement>,
+  ) {
+    buttons.forEach((btn) => {
+      if (btn.id !== id) {
+        btn.checked = false;
+      }
+    });
+  }
+</script>

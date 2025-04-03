@@ -1,0 +1,19 @@
+---
+const { href, title } = Astro.props;
+const { pathname } = Astro.url;
+
+const isActive = pathname.includes(href.slice(1));
+---
+
+<a href={href} class:list={[{ active: isActive }]}>
+  <h4
+    class=`${isActive ? "text-contrast" : "text-primary"} hover:text-contrast transition-colors duration-200`
+  >
+    {title}
+  </h4>
+</a>
+<style>
+  a.active {
+    font-weight: bold;
+  }
+</style>

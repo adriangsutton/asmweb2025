@@ -1,0 +1,63 @@
+---
+import Event from "./event-list-item.astro";
+import { getCollection } from "astro:content";
+import EmptyList from "../components/empty-list.astro";
+import EventsIcon from "../images/icons/calendar-note.svg";
+
+const events = await getCollection("events");
+
+const upcomingEvents = events.filter((event) => event.data.date > new Date());
+---
+
+<div class="w-full flex flex-col gap-2">
+  <div class="flex flex-row gap-4 items-center">
+    <div class="flex flex-row gap-2 items-center flex-grow">
+      <svg
+        width="39"
+        height="42"
+        viewBox="0 0 39 42"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          opacity="0.8"
+          d="M11.8786 3.40295L24 41.403L0 24.3517L11.8786 3.40295Z"
+          fill="#BC0F1E"></path>
+        <path
+          opacity="0.8"
+          d="M16.5864 9.99512L33.5858 9.5042L21.9961 26.1183L16.5864 9.99512Z"
+          fill="#575450"></path>
+      </svg>
+      <h2 class="text-contrast font-bold">EVENTS</h2>
+    </div>
+    <div class="flex flex-row gap-2 items-center">
+      <a
+        href={`${import.meta.env.BASE_URL}events`}
+        class="text-contrastDark hover:text-contrast">VIEW ALL</a
+      >
+    </div>
+  </div>
+  <div>
+    {
+      upcomingEvents.length === 0 && (
+        <div class="w-full flex flex-col gap-2 max-w-5xl bg-black/20 py-4 px-2 rounded-md">
+          <EmptyList
+            title="Nothing coming up!"
+            description="There are no upcoming events right now."
+            icon={EventsIcon}
+          />
+        </div>
+      )
+    }
+    {
+      upcomingEvents.map((event: any) => (
+        <Event
+          title={event.data.title}
+          date={event.data.date}
+          location={event.data.location}
+          compiledContent={event.rendered.html}
+        />
+      ))
+    }
+  </div>
+</div>

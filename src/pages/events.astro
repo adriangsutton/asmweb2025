@@ -1,0 +1,128 @@
+---
+import EventListItem from "../components/event-list-item.astro";
+import BaseLayout from "../layouts/base.astro";
+import { getCollection } from "astro:content";
+import EmptyList from "../components/empty-list.astro";
+import CalendarIcon from "../images/icons/calendar-note.svg";
+
+const events = await getCollection("events");
+
+const upcomingEvents = events.filter((event) => event.data.date > new Date());
+const pastEvents = events.filter((event) => event.data.date < new Date());
+---
+
+<style>
+  .gradient {
+    background-color: hsla(0, 0%, 100%, 1);
+    background-image:
+      radial-gradient(
+        at 10% 14%,
+        hsla(30, 82%, 55%, 0.47) 0px,
+        transparent 50%
+      ),
+      radial-gradient(
+        at 28% 81%,
+        hsla(201, 47%, 34%, 0.52) 0px,
+        transparent 50%
+      ),
+      radial-gradient(
+        at 80% 77%,
+        hsla(17, 74%, 52%, 0.56) 0px,
+        transparent 50%
+      ),
+      radial-gradient(
+        at 84% 22%,
+        hsla(195, 26%, 52%, 0.35) 0px,
+        transparent 50%
+      );
+  }
+</style>
+<BaseLayout staticHeader={true}>
+  <div
+    class="gradient w-full pt-24 flex flex-col gap-2 flex-grow px-4 pb-4 min-h-lvh relative"
+  >
+    <div class="flex flex-col gap-4 items-center">
+      <div class="flex flex-col gap-4">
+        <div class="flex flex-row gap-2 items-center flex-grow">
+          <svg
+            width="39"
+            height="42"
+            viewBox="0 0 39 42"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              opacity="0.8"
+              d="M11.8786 3.40295L24 41.403L0 24.3517L11.8786 3.40295Z"
+              fill="#BC0F1E"></path>
+            <path
+              opacity="0.8"
+              d="M16.5864 9.99512L33.5858 9.5042L21.9961 26.1183L16.5864 9.99512Z"
+              fill="#575450"></path>
+          </svg>
+          <h2 class="text-contrast font-bold">EVENTS</h2>
+        </div>
+      </div>
+      <div class="flex flex-row gap-2 items-center w-full p-2">
+        <hr
+          class="h-px border-t-0 bg-transparent bg-gradient-to-r from-transparent via-neutral-500 to-transparent opacity-50 dark:via-neutral-400 flex-grow"
+        />
+        <p class="text-contrast font-bold">UPCOMING</p>
+        <hr
+          class="h-px border-t-0 bg-transparent bg-gradient-to-r from-transparent via-neutral-500 to-transparent opacity-50 dark:via-neutral-400 flex-grow"
+        />
+      </div>
+      <div class="w-full flex flex-col gap-2 max-w-5xl">
+        {
+          upcomingEvents.length === 0 && (
+            <EmptyList
+              title="Nothing coming up!"
+              description="There are no upcoming events right now."
+              icon={CalendarIcon}
+            />
+          )
+        }
+        {
+          upcomingEvents.map((event: any) => (
+            <EventListItem
+              title={event.data.title}
+              date={event.data.date}
+              cover={event.data.cover}
+              compiledContent={event.rendered.html}
+            />
+          ))
+        }
+      </div>
+      <div class="flex flex-row gap-2 items-center w-full p-2">
+        <hr
+          class="h-px border-t-0 bg-transparent bg-gradient-to-r from-transparent via-neutral-500 to-transparent opacity-50 dark:via-neutral-400 flex-grow"
+        />
+        <p class="text-contrast font-bold">PAST EVENTS</p>
+        <hr
+          class="h-px border-t-0 bg-transparent bg-gradient-to-r from-transparent via-neutral-500 to-transparent opacity-50 dark:via-neutral-400 flex-grow"
+        />
+      </div>
+      <div class="w-full flex flex-col gap-2 max-w-5xl">
+        {
+          pastEvents.length === 0 && (
+            <EmptyList
+              title="No past events"
+              description="There are no past events archived."
+              icon="/public/icons/calendar-note.svg"
+            />
+          )
+        }
+        {
+          pastEvents.map((event: any) => (
+            <EventListItem
+              title={event.data.title}
+              date={event.data.date}
+              cover={event.data.cover}
+              compiledContent={event.rendered.html}
+            />
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</BaseLayout>

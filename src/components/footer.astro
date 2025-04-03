@@ -1,0 +1,53 @@
+---
+// @packages
+import { Image } from "astro:assets";
+
+// @components
+import IconLink from "../components/icon-link.astro";
+
+// social images
+import TwitterLogo from "../images/twitter-logo.png";
+import SpotifyLogo from "../images/spotify-logo.png";
+import InstagramLogo from "../images/instagram-logo.png";
+import AppleLogo from "../images/apple-logo.png";
+---
+
+<style>
+  .invert {
+    -webkit-filter: invert(1);
+    filter: invert(1);
+  }
+</style>
+<footer
+  class="ring-2 ring-contrastDark/60 px-3 py-2 z-40 flex flex-row items-center justify-between shadow-[0_-1px_8px_1px_rgba(0,0,0,0.25)] relative"
+>
+  <p class="text-white">© Adrian Sutton 2025</p>
+  <!--
+  <div class="flex flex-row gap-2 items-center">
+    <IconLink
+      width={34}
+      image={SpotifyLogo}
+      link="https://open.spotify.com/artist/2X8Vl5zqDsjdowwnFgp353?si=p2ZZkB0xS0uO74jFCELO6w&nd=1&dlsi=bfe9d91241aa4e14"
+      className="invert"
+    />
+    <IconLink
+      width={30}
+      image={AppleLogo}
+      link="https://open.spotify.com/artist/2X8Vl5zqDsjdowwnFgp353?si=p2ZZkB0xS0uO74jFCELO6w&nd=1&dlsi=bfe9d91241aa4e14"
+      className="invert"
+    />
+    <IconLink
+      width={30}
+      image={TwitterLogo}
+      link="https://open.spotify.com/artist/2X8Vl5zqDsjdowwnFgp353?si=p2ZZkB0xS0uO74jFCELO6w&nd=1&dlsi=bfe9d91241aa4e14"
+      className="invert"
+    />
+    <IconLink
+      width={30}
+      image={InstagramLogo}
+      link="https://open.spotify.com/artist/2X8Vl5zqDsjdowwnFgp353?si=p2ZZkB0xS0uO74jFCELO6w&nd=1&dlsi=bfe9d91241aa4e14"
+      className="invert"
+    />
+  </div>
+-->
+</footer>

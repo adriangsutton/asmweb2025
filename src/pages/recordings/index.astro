@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/base.astro";
+import { getCollection } from "astro:content";
+import RecordingListItem from "../../components/recording-list-item.astro";
+
+const recordings = await getCollection("recordings");
+
+const sortedRecordings = recordings.sort(
+  (a, b) => a.data.sectionSortOrder - b.data.sectionSortOrder,
+);
+---
+
+<style>
+  .gradient {
+    background-color: hsla(0, 0%, 100%, 1);
+    background-image:
+      radial-gradient(
+        at 10% 14%,
+        hsla(30, 82%, 55%, 0.47) 0px,
+        transparent 50%
+      ),
+      radial-gradient(
+        at 28% 81%,
+        hsla(201, 47%, 34%, 0.52) 0px,
+        transparent 50%
+      ),
+      radial-gradient(
+        at 80% 77%,
+        hsla(17, 74%, 52%, 0.56) 0px,
+        transparent 50%
+      ),
+      radial-gradient(
+        at 84% 22%,
+        hsla(195, 26%, 52%, 0.35) 0px,
+        transparent 50%
+      );
+  }
+</style>
+<BaseLayout staticHeader={true}>
+  <div
+    class="gradient min-h-[calc(100vh-50px)] w-full pt-20 flex flex-col items-center"
+  >
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-4 px-10 pt-6 mx-auto pb-4">
+      {
+        sortedRecordings.map((recording) => (
+          <RecordingListItem recording={recording} />
+        ))
+      }
+    </div>
+  </div>
+</BaseLayout>

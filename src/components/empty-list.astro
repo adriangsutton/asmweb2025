@@ -1,0 +1,19 @@
+---
+import { Image } from "astro:assets";
+const { title, description, icon } = Astro.props;
+---
+
+<div class="flex flex-col gap-2 items-center justify-center">
+  <div class="flex flex-col gap-2 items-center">
+    <Image
+      src={icon}
+      alt={title}
+      class="w-10 h-10"
+      inferSize={true}
+      width={40}
+      height={40}
+    />
+    <p class="text-contrastDark font-bold text-2xl">{title}</p>
+  </div>
+  <p class="text-contrastDark">{description}</p>
+</div>

@@ -1,0 +1,280 @@
+---
+import CDIcon from "../images/cd-icon.svg";
+import { Image } from "astro:assets";
+const { work, audioPath, pdfPath, inline } = Astro.props;
+---
+
+<div
+  class={inline
+    ? "flex flex-col gap-4 w-full md:hidden"
+    : "flex-col gap-4 w-md sticky top-24 max-w-72 hidden md:flex"}
+>
+  <div class="p-2 bg-white/50 rounded-md overflow-hidden flex flex-col gap-4">
+    <p class="text-md italic text-center">{work.data.shortDesc}</p>
+    {
+      (work.data.length || work.data.forces) && (
+        <hr class="h-px border-t-0 bg-transparent bg-gradient-to-r from-transparent via-white to-transparent opacity-60" />
+      )
+    }
+    {
+      work.data.length && (
+        <div class="flex flex-row gap-2 items-center">
+          <div class="w-5 h-5">
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 45 58"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M9.54313 8.82768L27.4843 11.6434L10.9551 26.9334L9.54313 8.82768Z"
+                fill="#EC922D"
+              />
+              <path
+                d="M36.5406 7.00815L22.1807 45.7603L8.19851 37.0857L36.5406 7.00815Z"
+                fill="#421C1A"
+              />
+            </svg>
+          </div>
+          <p class="text-sm text-nowrap">
+            <b>Duration: </b> {work.data.length}
+          </p>
+        </div>
+      )
+    }
+    {
+      work.data.workNumber && (
+        <div class="flex flex-row gap-2 items-center">
+          <div class="w-5 h-5">
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 45 58"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M9.54313 8.82768L27.4843 11.6434L10.9551 26.9334L9.54313 8.82768Z"
+                fill="#EC922D"
+              />
+              <path
+                d="M36.5406 7.00815L22.1807 45.7603L8.19851 37.0857L36.5406 7.00815Z"
+                fill="#421C1A"
+              />
+            </svg>
+          </div>
+          <p class="text-sm text-nowrap">
+            <b>Work no.: </b> {work.data.workNumber}
+          </p>
+        </div>
+      )
+    }
+    {
+      work.data.compositionYear && (
+        <div class="flex flex-row gap-2 items-center">
+          <div class="w-5 h-5">
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 45 58"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M9.54313 8.82768L27.4843 11.6434L10.9551 26.9334L9.54313 8.82768Z"
+                fill="#EC922D"
+              />
+              <path
+                d="M36.5406 7.00815L22.1807 45.7603L8.19851 37.0857L36.5406 7.00815Z"
+                fill="#421C1A"
+              />
+            </svg>
+          </div>
+          <p class="text-sm text-nowrap">
+            <b>Year of composition: </b> {work.data.compositionYear}
+          </p>
+        </div>
+      )
+    }
+    {
+      work.data.forces && (
+        <div class="flex flex-row gap-2 items-start">
+          <div class="w-5 h-5  pt-[4px]">
+            <svg
+              width="18"
+              height="15"
+              viewBox="0 0 39 42"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                opacity="0.8"
+                d="M11.8786 3.40295L24 41.403L0 24.3517L11.8786 3.40295Z"
+                fill="#BC0F1E"
+              />
+              <path
+                opacity="0.8"
+                d="M16.5864 9.99512L33.5858 9.5042L21.9961 26.1183L16.5864 9.99512Z"
+                fill="#575450"
+              />
+            </svg>
+          </div>
+          <p class="text-sm">
+            <b>Forces: </b>
+            {work.data.forces}
+          </p>
+        </div>
+      )
+    }
+  </div>
+  {
+    audioPath && (
+      <media-controller
+        audio
+        class="@container block w-full shadow-xl shadow-black/5 rounded-md overflow-hidden"
+        style="--media-primary-color: #2E6280; --media-secondary-color: #EDC579; --media-accent-color: #BC0F1E; --media-control-hover-background: #DDAC47; --media-tooltip-display: none;"
+      >
+        <audio src={audioPath} slot="media" playsinline />
+        <media-control-bar class="w-full">
+          <media-play-button />
+          <media-time-display />
+          <media-time-range />
+          <media-playback-rate-button />
+          <media-mute-button />
+        </media-control-bar>
+      </media-controller>
+    )
+  }
+  {
+    work.data.recording && (
+      <a href={work.data.recording} target="_blank">
+        <button class="btn bg-white text-black border-[#e5e5e5] w-full">
+          <Image src={CDIcon} alt="CD icon" width={25} height={25} />
+          Recording
+        </button>
+      </a>
+    )
+  }
+  {
+    pdfPath && (
+      <a
+        href={`${import.meta.env.BASE_URL}api/serve-pdf/${encodeURIComponent(work.data.workNumber)}`}
+        target="_blank"
+      >
+        <button class="btn bg-white text-black border-[#e5e5e5] w-full">
+          <svg
+            fill="#000000"
+            height="20px"
+            width="20px"
+            version="1.1"
+            id="Capa_1"
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+            viewBox="0 0 459.889 459.889"
+            xml:space="preserve"
+          >
+            <path
+              id="XMLID_1281_"
+              d="M310.138,274.839c0.197-18.678-5.973-35.675-16.929-46.63c-14.351-14.351-36.018-17.934-56.75-11.495
+  c-4.476-19.904-9.113-39.879-13.671-59.445c3.706-4.763,7.307-9.278,10.782-13.634c24.694-30.958,42.536-53.327,38.402-92.602
+  c-3.566-33.879-15.748-45.525-25.339-49.33c-9.226-3.661-19.637-1.357-28.558,6.321c-20.27,17.447-35.488,64.636-21,127.011
+  c1.346,5.795,2.711,11.657,4.089,17.571c-8.521,11.282-17.693,24.235-26.945,39.363c-28.073,45.896-26.966,79.653-21.094,99.891
+  c5.945,20.491,19.521,37.243,37.244,45.959c17.589,8.65,35.056,12.09,51.405,10.454c2.894,19.703,4.808,37.689,5.328,53.007
+  c-5.372-2.577-11.572-4.057-18.175-4.057c-20.402,0-37,14.056-37,31.333c0,17.277,16.598,31.333,37,31.333
+  c19.905,0,34.485-13.283,36.596-26.11c3.518-21.373,1.309-53.042-4.184-90.106c10.505-3.993,20.278-10.368,28.993-19.083
+  C302.716,312.209,309.934,294.075,310.138,274.839z M231.124,23.182c1.796-1.546,4.242-3.184,6.544-3.184
+  c0.542,0,1.076,0.091,1.592,0.295c4.51,1.789,10.573,11.46,12.822,32.833c3.276,31.12-10.81,48.779-34.147,78.036
+  c-0.314,0.395-0.631,0.791-0.949,1.191c-0.143-0.615-0.286-1.229-0.428-1.842C203.191,72.96,218.399,34.136,231.124,23.182z
+   M199.197,319.871c-12.503-6.149-22.545-18.704-26.863-33.585c-6.811-23.475-0.259-52.48,18.948-83.882
+  c5.385-8.804,10.688-16.774,15.862-24.109c3.581,15.446,7.216,31.268,10.761,47.138c-4.702,3.035-9.2,6.646-13.377,10.822
+  c-3.905,3.905-3.905,10.237,0,14.142c3.906,3.906,10.236,3.906,14.143,0c1.275-1.276,2.59-2.482,3.935-3.618
+  c6.114,28.214,11.741,56.122,16.068,81.861C226.39,329.63,213.119,326.718,199.197,319.871z M228.929,439.889
+  c-9.056,0-17-5.296-17-11.333c0-6.037,7.944-11.333,17-11.333s17,5.296,17,11.333C245.929,434.594,237.985,439.889,228.929,439.889z
+   M276.192,310.449c-5.612,5.612-11.656,9.945-18.074,12.99c-4.641-27.383-10.698-57.018-17.317-87.194
+  c14.282-5.016,28.927-3.234,38.267,6.106C293.442,256.725,294.97,291.67,276.192,310.449z"
+            />
+          </svg>
+          Score excerpt
+        </button>
+      </a>
+    )
+  }
+  {
+    work.data.buy && (
+      <a href={work.data.buy} target="_blank">
+        <button class="btn bg-white text-black border-[#e5e5e5] w-full">
+          <svg
+            width="20px"
+            height="20px"
+            viewBox="0 0 25 25"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8 17.5L5.81763 6.26772C5.71013 5.81757 5.30779 5.5 4.84498 5.5H3M8 17.5H17M8 17.5C8.82843 17.5 9.5 18.1716 9.5 19C9.5 19.8284 8.82843 20.5 8 20.5C7.17157 20.5 6.5 19.8284 6.5 19C6.5 18.1716 7.17157 17.5 8 17.5ZM17 17.5C17.8284 17.5 18.5 18.1716 18.5 19C18.5 19.8284 17.8284 20.5 17 20.5C16.1716 20.5 15.5 19.8284 15.5 19C15.5 18.1716 16.1716 17.5 17 17.5ZM7.78357 14.5H17.5L19 7.5H6"
+              stroke="#121923"
+              stroke-width="1.2"
+            />
+          </svg>
+          Buy printed score
+        </button>
+      </a>
+    )
+  }
+  {
+    work.data.buyPDF && (
+      <a href={work.data.buyPDF} target="_blank">
+        <button class="btn bg-white text-black border-[#e5e5e5] w-full">
+          <svg
+            width="20px"
+            height="20px"
+            viewBox="0 0 25 25"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8 17.5L5.81763 6.26772C5.71013 5.81757 5.30779 5.5 4.84498 5.5H3M8 17.5H17M8 17.5C8.82843 17.5 9.5 18.1716 9.5 19C9.5 19.8284 8.82843 20.5 8 20.5C7.17157 20.5 6.5 19.8284 6.5 19C6.5 18.1716 7.17157 17.5 8 17.5ZM17 17.5C17.8284 17.5 18.5 18.1716 18.5 19C18.5 19.8284 17.8284 20.5 17 20.5C16.1716 20.5 15.5 19.8284 15.5 19C15.5 18.1716 16.1716 17.5 17 17.5ZM7.78357 14.5H17.5L19 7.5H6"
+              stroke="#121923"
+              stroke-width="1.2"
+            />
+          </svg>
+          Buy PDF
+        </button>
+      </a>
+    )
+  }
+  {
+    work.data.hire && (
+      <a
+        href={`mailto:cordafonia@gmail.com?subject=Enquiry: ${work.data.workNumber} - ${work.data.title}`}
+        target="_blank"
+      >
+        <button class="btn bg-white text-black border-[#e5e5e5] w-full">
+          <svg
+            width="20px"
+            height="20px"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M4 9.00005L10.2 13.65C11.2667 14.45 12.7333 14.45 13.8 13.65L20 9"
+              stroke="#000000"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M3 9.17681C3 8.45047 3.39378 7.78123 4.02871 7.42849L11.0287 3.5396C11.6328 3.20402 12.3672 3.20402 12.9713 3.5396L19.9713 7.42849C20.6062 7.78123 21 8.45047 21 9.17681V17C21 18.1046 20.1046 19 19 19H5C3.89543 19 3 18.1046 3 17V9.17681Z"
+              stroke="#000000"
+              stroke-width="2"
+              stroke-linecap="round"
+            />
+          </svg>
+          Contact us to hire
+        </button>
+      </a>
+    )
+  }
+</div>
