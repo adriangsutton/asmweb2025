@@ -44,7 +44,6 @@ import AudioMutedIcon from "./audioMutedIcon.astro";
     </div>
   </label>
 </div>
-
 <script>
   const playIconContainer = document.getElementById("play-icon");
   const muteIconContainer = document.getElementById("mute-icon");
@@ -64,6 +63,19 @@ import AudioMutedIcon from "./audioMutedIcon.astro";
     const seconds = Math.floor(secs % 60);
     const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
     const formattedseconds = seconds < 10 ? `0${seconds}` : seconds;
+
+    if (
+      isNaN(secs) ||
+      secs === undefined ||
+      isNaN(hours) ||
+      isNaN(minutes) ||
+      isNaN(seconds) ||
+      hours === undefined ||
+      minutes === undefined ||
+      seconds === undefined
+    ) {
+      return "--:--";
+    }
 
     return hours > 0
       ? `${hours}:${formattedMinutes}:${formattedseconds}`
