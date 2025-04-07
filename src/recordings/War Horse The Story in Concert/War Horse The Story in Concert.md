@@ -3,13 +3,18 @@ title: "War Horse: The Story in Concert"
 url: "wh-story-in-concert"
 cover: "War Horse The Story in Concert.jpg"
 audioUrl: "https://embed.music.apple.com/us/album/war-horse-the-story-in-concert/1538075276"
-sectionSortOrder: 5
+sectionSortOrder: 2
 metadata:
-  - { title: "Label", description: "UNKNOWN" }
-  - { title: "Release Date", description: "19/08/2025" }
+  - { title: "Label", description: "BMG" }
+  - { title: "Release Date", description: "24/11/2017" }
   - { title: "Producer", description: "Adrian Sutton" }
 ---
+<b>Royal Philharmonic Orchestra</b> conducted by <b>David Angus</b>
 
-This is where content is to be placed!
+<b>Vocalist:</b>Tim van Eyken</b>
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+<b>Chorus:</b> London Voices
+
+<hr>
+
+"... ground-breaking...an unequalled experience of a story with music, based on Michael Morpurgo’s compelling and emotionally-charged novel." <i><small>— Classic FM</small></i>
