@@ -2,8 +2,10 @@
 import { Image } from "astro:assets";
 import ViolinConcertoImage from "../images/violin-concerto.jpg";
 import Rating from "fulldev-ui/components/Rating.astro";
+import ChandosChoiceLogo from "../images/Chandos Customers Choice 2024.jpg";
+import BBCNominatedLogo from "../images/BBC_MMA_Badge.png";
+import CDIcon from "../images/cd-icon.svg";
 
-const date = "23 April 2025";
 const title = "VIOLIN CONCERTO";
 ---
 
@@ -72,18 +74,25 @@ const title = "VIOLIN CONCERTO";
         Concerto, has been nominated for the BBC Music Magazine's 2025 Premiere
         award!
       </p>
-      <p class="text-sm md:text-md lg:text-lg"></p>
-        "..soaring, searing, passionately lyrical writing ..a great showcase for a remarkable talent, and living proof that serious, substantial music of the tonal and melodic variety can still (_mirabile dictu_) be found in an original and individual voice." 
+      <p class="text-sm md:text-md lg:text-lg">
+        "..soaring, searing, passionately lyrical writing ..a great showcase for
+        a remarkable talent, and living proof that serious, substantial music of
+        the tonal and melodic variety can still (_mirabile dictu_) be found in
+        an original and individual voice."
         <i><small>— Jeremy Nicholas, Gramophone Magazine</small></i>
       </p>
-      <!--<p class="text-sm md:text-md lg:text-lg">
-        Recorded with the BBC Philharmonic Orchestra under Michael Seal, the
-        release features the soloist Fenella Humphreys and in addition to the
-        concerto includes Short Story, A Fist Full Of Fives, War Horse Suite and
-        Five Theatre Miniatures
-      </p> -->
     </div>
-    <div class="flex flex-row gap-3 flex-wrap text-white">
+    <div class="flex flex-row gap-4 flex-wrap text-white items-end">
+      <Image
+        src={ChandosChoiceLogo}
+        alt="Chandos Choice Logo"
+        class="w-20 h-20 drop-shadow-2xl rounded-md"
+      />
+      <Image
+        src={BBCNominatedLogo}
+        alt="BBC Nominated Logo"
+        class="w-20 h-20 drop-shadow-2xl"
+      />
       <div class="flex flex-col">
         <a
           href="https://www.classical-music.com/reviews/orchestral/adrian-sutton-violin-concerto-orchestral-works"
@@ -97,6 +106,12 @@ const title = "VIOLIN CONCERTO";
       class="h-px border-t-0 bg-transparent bg-gradient-to-r from-transparent via-white to-transparent opacity-100"
     />
     <div class="flex flex-row gap-3">
+      <a href={`${import.meta.env.BASE_URL}recordings/orchestral-works`}>
+        <button class="btn bg-white text-black border-[#e5e5e5]">
+          <Image src={CDIcon} alt="CD icon" width={25} height={25} />
+          View Recording
+        </button>
+      </a>
       <button
         onclick="document.getElementById('about').scrollIntoView({behavior: 'smooth' })"
         class="btn bg-white text-black border-[#e5e5e5]"
@@ -118,26 +133,6 @@ const title = "VIOLIN CONCERTO";
 
         News & Events
       </button>
-      <!-- <button
-        onclick="document.getElementById('other-projects').scrollIntoView({behavior: 'smooth' })"
-        class="btn bg-white text-black border-[#e5e5e5]"
-      >
-        <svg
-          width="25"
-          height="26"
-          viewBox="0 0 43 28"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M5.69329 2.21084L24.097 7.10668L4.70968 21.2292L5.69329 2.21084Z"
-            fill="#BC0F1E"></path>
-          <path
-            d="M27.7329 8.31412L39.4543 24.4976L10.5278 21.7791L27.7329 8.31412Z"
-            fill="#E1602B"></path>
-        </svg>
-        Other Projects
-      </button> -->
     </div>
   </div>
   <div class="w-1/2 max-w-md relative min-w-60 pl-2 md:pl-0">

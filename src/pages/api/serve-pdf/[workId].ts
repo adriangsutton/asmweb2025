@@ -31,16 +31,13 @@ export async function GET(context: {
     `${pdf}.pdf`,
   );
 
-  // const filePath = fileURLToPath(
-  //   new URL(`../../../works/${workId}/pdf/${pdf}.pdf`, import.meta.url),
-  // );
-
   try {
     const fileBuffer = await readFile(filePath);
     return new Response(fileBuffer, {
       headers: {
         "Content-Type": "application/pdf",
-        "Content-Disposition": `inline; filename="${pdf}.pdf"`,
+        "Content-Disposition": `attachment; filename="${pdf}.pdf"; filename*=UTF-8''${encodeURIComponent(pdf)}.pdf`,
+        "Cache-Control": "public, max-age=31536000",
       },
     });
   } catch (error) {

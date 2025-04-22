@@ -89,3 +89,13 @@ h4 {
     display: none;
   }
 }
+
+.decorated-link {
+  color: #bc0f1e;
+  text-decoration: none;
+}
+
+.decorated-link:hover {
+  color: #bc0f1e;
+  text-decoration: underline;
+}
