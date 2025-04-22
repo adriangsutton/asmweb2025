@@ -42,9 +42,9 @@ const { recording, inline } = Astro.props;
       {
         recording.data.metadata?.map((metadata: any) => (
           <>
-            <div class="flex flex-row gap-2 items-end w-full justify-between">
-              <span class="text-sm">{metadata.title}</span>
-              <span class="font-bold">{metadata.description}</span>
+            <div class="flex flex-row gap-2 items-start w-full justify-between">
+              <span class="text-sm mr-5">{metadata.title}</span>
+              <span class="font-bold text-end">{metadata.description}</span>
             </div>
             <hr class="h-px border-t-0 bg-transparent bg-gradient-to-r from-transparent via-neutral-500 to-transparent opacity-50 dark:via-neutral-400" />
           </>

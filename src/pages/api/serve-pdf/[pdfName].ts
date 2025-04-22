@@ -6,13 +6,13 @@ import path from "path";
 const works = await getCollection("works");
 
 export async function GET(context: {
-  params: { workId: string };
-  props: { pdf: string };
+  params: { pdfName: string };
+  props: { workId: string };
 }) {
-  const { workId } = context.params;
-  const { pdf } = context.props;
+  const { pdfName } = context.params;
+  const { workId } = context.props;
 
-  if (!workId || !pdf) {
+  if (!workId || !pdfName) {
     return new Response("Missing required parameters", {
       status: 400,
       headers: {
@@ -28,7 +28,7 @@ export async function GET(context: {
     "works",
     workId,
     "pdf",
-    `${pdf}.pdf`,
+    `${pdfName}`,
   );
 
   try {
@@ -36,7 +36,7 @@ export async function GET(context: {
     return new Response(fileBuffer, {
       headers: {
         "Content-Type": "application/pdf",
-        "Content-Disposition": `attachment; filename="${pdf}.pdf"; filename*=UTF-8''${encodeURIComponent(pdf)}.pdf`,
+        "Content-Disposition": `attachment; filename="${pdfName}"; filename*=UTF-8''${encodeURIComponent(pdfName)}`,
         "Cache-Control": "public, max-age=31536000",
       },
     });
@@ -47,10 +47,12 @@ export async function GET(context: {
 }
 
 export function getStaticPaths() {
-  return works.map((work) => ({
-    params: { workId: work.data.workNumber },
+  const worksWithPdf = works.filter((work) => work.data.pdf);
+
+  return worksWithPdf.map((work) => ({
+    params: { pdfName: work.data.pdf + ".pdf" },
     props: {
-      pdf: work.data.pdf,
+      workId: work.data.workNumber,
     },
   }));
 }
