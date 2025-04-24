@@ -99,3 +99,23 @@ h4 {
   color: #bc0f1e;
   text-decoration: underline;
 }
+
+.fragment-content-red a {
+  color: #bc0f1e;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.fragment-content-red a:hover {
+  text-decoration: underline;
+}
+
+.fragment-content-orange a {
+  color: #ff9776;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.fragment-content-orange a:hover {
+  text-decoration: underline;
+}

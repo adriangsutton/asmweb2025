@@ -10,4 +10,4 @@ metadata:
   - { title: "Producer", description: "Matthew Bennett" }
 ---
 
-This disc contains <a href="/works/AS0014" className="decorated-link">Spring Masque</a>, Adrian's energy-filled duet for violin and viola, performed by Fenella Humphreys and Andrew Berridge.
+This disc contains <a href="/works/AS0014">Spring Masque</a>, Adrian's energy-filled duet for violin and viola, performed by Fenella Humphreys and Andrew Berridge.
