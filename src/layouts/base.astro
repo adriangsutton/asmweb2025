@@ -27,6 +27,20 @@ import "../fonts/HalisGRLight.woff";
     ></script>
     <script type="module" src="https://cdn.jsdelivr.net/npm/media-chrome@4/+esm"
     ></script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=UA-87769734-1"></script>
+    <script>
+      // @ts-ignore
+      window.dataLayer = window.dataLayer || [];
+      function gtag(...args: any[]) {
+        // @ts-ignore
+        window.dataLayer.push(args);
+      }
+      gtag("js", new Date());
+      gtag("config", "UA-87769734-1");
+    </script>
   </head>
   <body class="relative">
     <div class="fixed top-0 left-0 w-full h-full max-h-[50vh] -z-0">
