@@ -24,13 +24,33 @@ if (!work) {
 
 const { Content } = await render(work);
 
-const audioPath = work?.data.audio
-  ? `${import.meta.env.BASE_URL}api/serve-audio/${encodeURIComponent(work.data.workNumber)}`
+// Audio
+const audioPath = work?.data.audio ?? null;
+
+let correctedAudioPath = audioPath;
+
+if (audioPath) {
+  if (!audioPath.includes(".mp3")) {
+    correctedAudioPath = audioPath + ".mp3";
+  }
+
+  correctedAudioPath = `${import.meta.env.BASE_URL}api/serve-audio/${encodeURIComponent(correctedAudioPath)}`;
+}
+
+// PDF
+const pdfPath = work?.data.pdf
+  ? work.data.pdf.replace("./", "../../works/")
   : null;
 
-const pdfPath = work?.data.pdf
-  ? work.data.pdf.replace("./", "../../works/") + "?url"
-  : null;
+let correctedPdfPath = pdfPath;
+
+if (pdfPath && !pdfPath.includes(".pdf")) {
+  if (!pdfPath.includes(".pdf")) {
+    correctedPdfPath = pdfPath + ".pdf";
+  }
+
+  correctedPdfPath = `${import.meta.env.BASE_URL}api/serve-pdf/${encodeURIComponent(correctedPdfPath)}`;
+}
 ---
 
 <style>
@@ -109,8 +129,8 @@ const pdfPath = work?.data.pdf
       </div>
       <WorkMetadata
         work={work}
-        audioPath={audioPath}
-        pdfPath={pdfPath}
+        audioPath={correctedAudioPath}
+        pdfPath={correctedPdfPath}
         inline={true}
       />
       <div
@@ -120,7 +140,11 @@ const pdfPath = work?.data.pdf
         <Content />
       </div>
     </div>
-    <WorkMetadata work={work} audioPath={audioPath} pdfPath={pdfPath} />
+    <WorkMetadata
+      work={work}
+      audioPath={correctedAudioPath}
+      pdfPath={correctedPdfPath}
+    />
   </div>
 </BaseLayout>
 <script>

@@ -49,10 +49,18 @@ export async function GET(context: {
 export function getStaticPaths() {
   const worksWithPdf = works.filter((work) => work.data.pdf);
 
-  return worksWithPdf.map((work) => ({
-    params: { pdfName: work.data.pdf + ".pdf" },
-    props: {
-      workId: work.data.workNumber,
-    },
-  }));
+  return worksWithPdf.map((work) => {
+    let pdfName = work.data.pdf;
+
+    if (pdfName && !pdfName.includes(".pdf")) {
+      pdfName = pdfName + ".pdf";
+    }
+
+    return {
+      params: { pdfName: pdfName },
+      props: {
+        workId: work.data.workNumber,
+      },
+    };
+  });
 }

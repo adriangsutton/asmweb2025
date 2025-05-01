@@ -6,13 +6,13 @@ import { getCollection } from "astro:content";
 const works = await getCollection("works");
 
 export async function GET(context: {
-  params: { workId: string };
-  props: { audio: string };
+  params: { audioName: string };
+  props: { workId: string };
 }) {
-  const { workId } = context.params;
-  const { audio } = context.props;
+  const { audioName } = context.params;
+  const { workId } = context.props;
 
-  if (!workId || !audio) {
+  if (!workId || !audioName) {
     return new Response("Missing required parameters", {
       status: 400,
       headers: {
@@ -29,7 +29,7 @@ export async function GET(context: {
     "works",
     workId,
     "audio",
-    `${audio}.mp3`,
+    `${audioName}`,
   );
 
   try {
@@ -38,7 +38,7 @@ export async function GET(context: {
     return new Response(fileBuffer, {
       headers: {
         "Content-Type": "audio/mpeg",
-        "Content-Disposition": `inline; filename="${audio}.mp3"`,
+        "Content-Disposition": `inline; filename="${audioName}.mp3"`,
       },
     });
   } catch (error) {
@@ -48,10 +48,20 @@ export async function GET(context: {
 }
 
 export function getStaticPaths() {
-  return works.map((work) => ({
-    params: { workId: work.data.workNumber },
-    props: {
-      audio: work.data.audio,
-    },
-  }));
+  const worksWithAudio = works.filter((work) => work.data.audio);
+
+  return worksWithAudio.map((work) => {
+    let audioName = work.data.audio;
+
+    if (audioName && !audioName.includes(".mp3")) {
+      audioName = audioName + ".mp3";
+    }
+
+    return {
+      params: { audioName: audioName },
+      props: {
+        workId: work.data.workNumber,
+      },
+    };
+  });
 }

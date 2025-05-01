@@ -16,7 +16,7 @@ import "../fonts/HalisGRLight.woff";
 <html lang="en" data-theme="custom" class="bg-contrastDark">
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="./fav-logo-white.svg" />
+    <link rel="icon" type="image/png" href="./fav-logo-white.png" />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
     <title>Adrian Sutton</title>
@@ -29,7 +29,7 @@ import "../fonts/HalisGRLight.woff";
     ></script>
 
     <!-- Global site tag (gtag.js) - Google Analytics - OLD UA STYLE -->
-    
+
     <!--<script
       async
       src="https://www.googletagmanager.com/gtag/js?id=UA-87769734-1"></script>
@@ -45,20 +45,22 @@ import "../fonts/HalisGRLight.woff";
     </script>
   -->
 
-  <!-- Google tag (gtag.js) NEW GA4 format -->
-    <script 
-      async 
-      src="https://www.googletagmanager.com/gtag/js?id=G-JFEJ0NBPL8"></script>
+    <!-- Google tag (gtag.js) NEW GA4 format -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-JFEJ0NBPL8"
+    ></script>
     <script>
       // @ts-ignore
       window.dataLayer = window.dataLayer || [];
       // @ts-ignore
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'G-JFEJ0NBPL8');
+      function gtag() {
+        // @ts-ignore
+        window.dataLayer.push(arguments);
+      }
+      // @ts-ignore
+      gtag("js", new Date());
+      // @ts-ignore
+      gtag("config", "G-JFEJ0NBPL8");
     </script>
-
   </head>
   <body class="relative">
     <div class="fixed top-0 left-0 w-full h-full max-h-[50vh] -z-0">

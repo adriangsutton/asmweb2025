@@ -4,9 +4,17 @@ import PauseIcon from "./pauseIcon.astro";
 
 const { work } = Astro.props;
 
-const audioPath = work.data.audio
-  ? `${import.meta.env.BASE_URL}api/serve-audio/${encodeURIComponent(work.data.workNumber)}`
-  : null;
+const audioPath = work?.data.audio ?? null;
+
+let correctedAudioPath = audioPath;
+
+if (audioPath) {
+  if (!audioPath.includes(".mp3")) {
+    correctedAudioPath = audioPath + ".mp3";
+  }
+
+  correctedAudioPath = `${import.meta.env.BASE_URL}api/serve-audio/${encodeURIComponent(correctedAudioPath)}`;
+}
 ---
 
 <a href={`${import.meta.env.BASE_URL}works/${work.data.workNumber}`}>
@@ -43,7 +51,7 @@ const audioPath = work.data.audio
               type="checkbox"
               class="card-pay-buttons"
               id={work.data.workNumber}
-              data-audio-url={audioPath}
+              data-audio-url={correctedAudioPath}
               aria-label="Play and pause"
             />
             <div class="swap-off p-2">
