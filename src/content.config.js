@@ -76,7 +76,7 @@ export const collections = {
         forces: z.string(),
         sectionSortOrder: z.number(),
         tags: z.array(
-          z.enum(["orchestral", "ensemble", "soloduo", "choral", "theatre"]),
+          z.enum(["orchestral", "ensemble", "soloduo", "choral", "theatre", "piano", "violin", "viola"]),
         ),
         compositionYear: z.string(),
         hire: z.optional(z.boolean()),
