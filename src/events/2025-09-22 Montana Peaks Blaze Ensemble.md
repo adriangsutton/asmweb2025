@@ -6,4 +6,4 @@ location: "The Old Hall, Lincoln's Inn, London"
 
 Adrian's dectet Montana Peaks will be performed in a lunchtime concert at Lincoln's Inn by the Blaze Ensemble.  
 
-See the <a href="https://www.blazeensemble.com/" target="_blank">Blaze Ensemble</a> website for more details.   
+See the <a href="https://www.lincolnsinn.org.uk/whats-on/blaze-ensemble-free-lunchtime-concert/" target="_blank">Lincoln's Inn</a> website for more details.   
