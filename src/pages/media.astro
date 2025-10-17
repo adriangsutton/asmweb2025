@@ -9,7 +9,12 @@ import BirdThree from "../images/bird-3.png";
 import MediaImageCard from "../components/media-image-card.astro";
 import Modal from "../components/modal.astro";
 import FilterIcon from "../components/filter-icon.astro";
-const media = await getCollection("media");
+
+let media = await getCollection("media");
+
+media = media.sort((a, b) => {
+  return (b.data.order ?? 0) - (a.data.order ?? 0);
+});
 
 // Define filter categories
 const filterCategories = [
