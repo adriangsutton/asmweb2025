@@ -94,12 +94,19 @@ export const collections = {
         audio: z.any(),
         pdf: z.any(),
         buyPDF: z.optional(z.string()),
-        buyPDF_DZ: z.optional(z.string()),
         bannerImage: z.optional(image()),
         titleImage: z.optional(image()),
         recording: z.optional(z.string()),
         moreInfo: z.optional(z.boolean()),
         buy: z.optional(z.string()),
+        customBuy: z.optional(
+          z.array(
+            z.object({
+              label: z.string(),
+              url: z.string(),
+            }),
+          ),
+        ),
       }),
   }),
 };
