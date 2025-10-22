@@ -45,6 +45,7 @@ export const collections = {
         ),
         order: z.optional(z.number()),
         attribution: z.optional(z.string()),
+        hidden: z.optional(z.boolean()),
       }),
   }),
   recordings: defineCollection({
@@ -93,6 +94,7 @@ export const collections = {
         audio: z.any(),
         pdf: z.any(),
         buyPDF: z.optional(z.string()),
+        buyPDF_DZ: z.optional(z.string()),
         bannerImage: z.optional(image()),
         titleImage: z.optional(image()),
         recording: z.optional(z.string()),

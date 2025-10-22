@@ -12,9 +12,11 @@ import FilterIcon from "../components/filter-icon.astro";
 
 let media = await getCollection("media");
 
-media = media.sort((a, b) => {
-  return (b.data.order ?? 0) - (a.data.order ?? 0);
-});
+media = media
+  .sort((a, b) => {
+    return (b.data.order ?? 0) - (a.data.order ?? 0);
+  })
+  .filter((item) => !item.data.hidden);
 
 // Define filter categories
 const filterCategories = [
