@@ -2,7 +2,11 @@
 const { href, title } = Astro.props;
 const { pathname } = Astro.url;
 
-const isActive = pathname.includes(href.slice(1));
+let isActive = pathname.includes(href.slice(1));
+
+if (href === "./") {
+  isActive = pathname === "/";
+}
 ---
 
 <a href={href} class:list={[{ active: isActive }]}>

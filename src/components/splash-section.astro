@@ -61,7 +61,7 @@ const title = "VIOLIN CONCERTO";
   }
 </style>
 <div
-  class="splash min-h-lvh flex flex-col-reverse pt-28 md:flex-row items-center justify-around gap-10 place-content-between p-10 pr-16 drop-shadow-2xl w-screen"
+  class="splash min-h-lvh flex flex-col-reverse pt-28 md:flex-row items-center justify-around gap-10 place-content-between p-10 pr-16 drop-shadow-2xl w-screen relative z-10"
 >
   <div class="flex-grow max-w-lg flex flex-col gap-4">
     <div class="w-full text-white flex flex-col gap-3">
@@ -71,8 +71,7 @@ const title = "VIOLIN CONCERTO";
       <p class="text-sm md:text-md lg:text-lg">
         We are hugely proud to announce that the Chandos release of Adrian's
         major orchestral works, including his recently-premiered Violin
-        Concerto, HAS WON the BBC Music Magazine's 2025 Premiere
-        award!
+        Concerto, HAS WON the BBC Music Magazine's 2025 Premiere award!
       </p>
       <p class="text-sm md:text-md lg:text-lg">
         "..soaring, searing, passionately lyrical writing ..a great showcase for
@@ -105,36 +104,33 @@ const title = "VIOLIN CONCERTO";
     <hr
       class="h-px border-t-0 bg-transparent bg-gradient-to-r from-transparent via-white to-transparent opacity-100"
     />
-    <div class="flex flex-col sm:flex-row gap-3">
+    <div class="flex flex-row flex-wrap gap-3">
       <a href={`${import.meta.env.BASE_URL}recordings/orchestral-works`}>
-        <button
-          class="btn bg-white text-black border-[#e5e5e5] w-full sm:w-fit"
-        >
+        <button class="btn bg-white text-black border-[#e5e5e5]">
           <Image src={CDIcon} alt="CD icon" width={25} height={25} />
           View Recording
         </button>
       </a>
-      <button
-        onclick="document.getElementById('about').scrollIntoView({behavior: 'smooth' })"
-        class="btn bg-white text-black border-[#e5e5e5]"
-      >
-        <svg
-          width="30"
-          height="28"
-          viewBox="0 0 45 58"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M9.54313 8.82768L27.4843 11.6434L10.9551 26.9334L9.54313 8.82768Z"
-            fill="#EC922D"></path>
-          <path
-            d="M36.5406 7.00815L22.1807 45.7603L8.19851 37.0857L36.5406 7.00815Z"
-            fill="#421C1A"></path>
-        </svg>
+      <a href={`${import.meta.env.BASE_URL}news-and-events`}>
+        <button class="btn bg-white text-black border-[#e5e5e5]">
+          <svg
+            width="30"
+            height="28"
+            viewBox="0 0 45 58"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M9.54313 8.82768L27.4843 11.6434L10.9551 26.9334L9.54313 8.82768Z"
+              fill="#EC922D"></path>
+            <path
+              d="M36.5406 7.00815L22.1807 45.7603L8.19851 37.0857L36.5406 7.00815Z"
+              fill="#421C1A"></path>
+          </svg>
 
-        News & Events
-      </button>
+          News & Events
+        </button>
+      </a>
     </div>
   </div>
   <div class="w-1/2 max-w-md relative min-w-60 pl-2 md:pl-0">
